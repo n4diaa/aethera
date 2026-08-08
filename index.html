@@ -1,0 +1,3554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aethera</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+overflow:hidden;
+background:#04050a;
+font-family:'Poppins',sans-serif;
+height:100vh;
+color:white;
+}
+
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+}
+
+#bg{
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at top,#1f2959 0%,#090b16 45%,#030308 100%);
+overflow:hidden;
+}
+
+#moon{
+
+position:absolute;
+right:10%;
+top:10%;
+
+width:170px;
+height:170px;
+
+border-radius:50%;
+
+background:
+
+radial-gradient(circle at 35% 35%,
+#fffdf8,
+#fff3d2 35%,
+#ffd58e 80%);
+
+box-shadow:
+
+0 0 40px rgba(255,255,255,.5),
+
+0 0 120px rgba(255,245,190,.3),
+
+0 0 200px rgba(255,255,255,.2);
+
+animation:
+
+moonFloat 8s ease-in-out infinite;
+
+}
+
+@keyframes moonFloat{
+
+0%{
+
+transform:translateY(0px);
+
+}
+
+50%{
+
+transform:translateY(-15px);
+
+}
+
+100%{
+
+transform:translateY(0);
+
+}
+
+}
+
+.fog{
+
+position:absolute;
+
+width:200%;
+
+height:250px;
+
+background:
+
+linear-gradient(
+
+90deg,
+
+transparent,
+
+rgba(255,255,255,.04),
+
+transparent
+
+);
+
+filter:blur(35px);
+
+animation:fogMove 60s linear infinite;
+
+}
+
+.fog:nth-child(1){
+
+top:20%;
+
+}
+
+.fog:nth-child(2){
+
+bottom:15%;
+
+animation-duration:80s;
+
+opacity:.5;
+
+}
+
+@keyframes fogMove{
+
+0%{
+
+transform:translateX(-60%);
+
+}
+
+100%{
+
+transform:translateX(0%);
+
+}
+
+}
+
+#intro{
+
+position:absolute;
+
+left:50%;
+
+top:50%;
+
+transform:translate(-50%,-50%);
+
+text-align:center;
+
+z-index:100;
+
+width:90%;
+
+max-width:900px;
+
+}
+
+#title{
+
+font-family:
+
+'Cormorant Garamond',
+
+serif;
+
+font-size:90px;
+
+letter-spacing:12px;
+
+font-weight:600;
+
+opacity:0;
+
+animation:
+
+fadeTitle 3s forwards;
+
+}
+
+@keyframes fadeTitle{
+
+to{
+
+opacity:1;
+
+}
+
+}
+
+#subtitle{
+
+margin-top:18px;
+
+font-size:18px;
+
+opacity:.75;
+
+line-height:1.8;
+
+animation:
+
+fadeTitle 4s forwards;
+
+}
+
+.enter{
+
+margin-top:60px;
+
+padding:18px 60px;
+
+background:
+
+rgba(255,255,255,.08);
+
+border:1px solid rgba(255,255,255,.2);
+
+backdrop-filter:blur(20px);
+
+border-radius:100px;
+
+color:white;
+
+font-size:15px;
+
+letter-spacing:6px;
+
+cursor:pointer;
+
+transition:.4s;
+
+}
+
+.enter:hover{
+
+transform:translateY(-4px);
+
+background:white;
+
+color:#111;
+
+box-shadow:
+
+0 20px 50px rgba(255,255,255,.15);
+
+}
+
+#loading{
+
+position:absolute;
+
+top:40px;
+
+left:50%;
+
+transform:translateX(-50%);
+
+letter-spacing:5px;
+
+font-size:12px;
+
+opacity:.5;
+
+}
+
+.star{
+
+position:absolute;
+
+background:white;
+
+border-radius:50%;
+
+animation:twinkle infinite alternate;
+
+}
+
+@keyframes twinkle{
+
+from{
+
+opacity:.2;
+
+}
+
+to{
+
+opacity:1;
+
+}
+
+}
+/* ===========================
+WORLD
+=========================== */
+
+#world{
+
+position:absolute;
+left:50%;
+bottom:5%;
+transition:2s;
+transform:translateX(-50%);
+
+z-index:500;
+
+animation:floatIsland 6s ease-in-out infinite;
+pointer-events:auto;
+
+}
+
+@keyframes floatIsland{
+
+0%,100%{
+
+transform:translateX(-50%) translateY(0);
+
+}
+
+50%{
+
+transform:translateX(-50%) translateY(-15px);
+
+}
+
+}
+
+#island{
+
+width:420px;
+height:160px;
+
+border-radius:50%;
+
+background:
+
+radial-gradient(circle,#3c5d39,#1e3520);
+
+box-shadow:
+
+0 40px 90px rgba(0,0,0,.55);
+
+position:relative;
+
+overflow:visible;
+
+}
+
+/* ===========================
+TREE
+=========================== */
+
+#tree{
+
+position:absolute;
+
+left:50%;
+
+bottom:55px;
+
+transform:translateX(-50%);
+
+width:22px;
+
+height:130px;
+
+background:#4d3217;
+
+border-radius:20px;
+
+}
+
+#tree::before{
+
+content:"";
+
+position:absolute;
+
+bottom:80px;
+
+left:50%;
+
+transform:translateX(-50%);
+
+width:170px;
+
+height:170px;
+
+border-radius:50%;
+
+background:
+
+radial-gradient(circle,#ffd7ef,#ffb9dc,#f59acb);
+
+box-shadow:
+
+0 0 80px rgba(255,180,220,.4);
+
+}
+
+/* =======================
+LAKE
+======================= */
+
+#lake{
+
+position:absolute;
+
+bottom:-30px;
+
+left:50%;
+
+transform:translateX(-50%);
+
+width:230px;
+
+height:70px;
+
+border-radius:50%;
+
+background:
+
+radial-gradient(circle,
+
+rgba(170,220,255,.55),
+
+rgba(60,120,255,.18),
+
+transparent);
+
+filter:blur(4px);
+
+animation:lakeGlow 4s ease-in-out infinite;
+
+}
+
+@keyframes lakeGlow{
+
+0%,100%{
+
+opacity:.5;
+
+transform:translateX(-50%) scale(1);
+
+}
+
+50%{
+
+opacity:1;
+
+transform:translateX(-50%) scale(1.06);
+
+}
+
+}
+
+/* =======================
+BUTTERFLIES
+======================= */
+
+.butterfly{
+
+position:absolute;
+
+width:14px;
+
+height:14px;
+
+border-radius:50%;
+
+background:#ffe8ff;
+
+box-shadow:
+
+0 0 18px rgba(255,255,255,.8);
+
+animation:fly 9s linear infinite;
+
+}
+
+.butterfly:nth-child(1){
+
+left:80px;
+
+top:-20px;
+
+animation-delay:0s;
+
+}
+
+.butterfly:nth-child(2){
+
+left:230px;
+
+top:10px;
+
+animation-delay:2s;
+
+}
+
+.butterfly:nth-child(3){
+
+left:180px;
+
+top:-40px;
+
+animation-delay:5s;
+
+}
+
+.butterfly:nth-child(4){
+
+left:300px;
+
+top:-10px;
+
+animation-delay:7s;
+
+}
+
+@keyframes fly{
+
+0%{
+
+transform:translate(0,0);
+
+}
+
+25%{
+
+transform:translate(40px,-30px);
+
+}
+
+50%{
+
+transform:translate(-30px,-60px);
+
+}
+
+75%{
+
+transform:translate(-60px,-10px);
+
+}
+
+100%{
+
+transform:translate(0,0);
+
+}
+
+}
+#gate::after{
+
+content:"";
+
+position:absolute;
+
+inset:-12px;
+
+border-radius:50px 50px 0 0;
+
+border:2px solid rgba(255,255,255,.3);
+
+animation:ring 2s infinite;
+
+}
+
+@keyframes ring{
+
+0%{
+
+transform:scale(1);
+
+opacity:1;
+
+}
+
+100%{
+
+transform:scale(1.35);
+
+opacity:0;
+
+}
+
+}
+#library{
+
+position:absolute;
+
+inset:0;
+
+display:none;
+
+justify-content:center;
+
+align-items:center;
+
+z-index:200;
+
+}
+
+/* =========================================
+   LIBRARY
+========================================= */
+
+#library{
+
+    position:fixed;
+    inset:0;
+
+    display:none;
+
+    justify-content:center;
+    align-items:center;
+
+    z-index:200;
+
+    perspective:2000px;
+
+    background:
+    rgba(0,0,0,.2);
+
+}
+
+
+/* =========================================
+   BOOK
+========================================= */
+
+#book{
+
+    position:relative;
+
+    width:760px;
+    height:480px;
+
+    transform-style:preserve-3d;
+
+    opacity:0;
+
+    transform:
+        scale(.8)
+        translateY(40px);
+
+}
+
+
+/* =========================================
+   BUKU MUNCUL
+========================================= */
+
+#book.book-visible{
+
+    animation:
+        bookAppear
+        1s
+        ease
+        forwards;
+
+}
+
+
+@keyframes bookAppear{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            scale(.8)
+            translateY(40px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            scale(1)
+            translateY(0);
+
+    }
+
+}
+
+
+/* =========================================
+   HALAMAN
+========================================= */
+
+.book-pages{
+
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    width:100%;
+    height:100%;
+
+    opacity:0;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 40px 100px
+        rgba(0,0,0,.6);
+
+}
+
+
+#book.pages-visible
+.book-pages{
+
+    opacity:1;
+
+}
+
+
+/* =========================================
+   PAGE
+========================================= */
+
+.book-page{
+
+    position:relative;
+
+    width:50%;
+    height:100%;
+
+    padding:45px;
+
+    color:#3d3429;
+
+}
+
+
+.page-left{
+
+    background:
+    linear-gradient(
+        90deg,
+        #d0c3b0,
+        #eee5d6
+    );
+
+    border-radius:
+        15px 0 0 15px;
+
+}
+
+
+.page-right{
+
+    background:
+    linear-gradient(
+        90deg,
+        #eee7da,
+        #fffdf8
+    );
+
+    border-radius:
+        0 15px 15px 0;
+
+}
+
+
+/* =========================================
+   COVER
+========================================= */
+
+.book-cover{
+
+    position:absolute;
+
+    top:0;
+
+    width:50%;
+    height:100%;
+
+    z-index:10;
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #241711,
+        #6d4935 50%,
+        #2a1a15
+    );
+
+    color:#f9ead0;
+
+    transform-style:preserve-3d;
+
+    backface-visibility:hidden;
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.6);
+
+}
+
+
+/* =========================================
+   COVER KIRI
+========================================= */
+
+.cover-front{
+
+    left:0;
+
+    transform-origin:
+        left center;
+
+    border-radius:
+        15px 0 0 15px;
+
+}
+
+
+/* =========================================
+   COVER KANAN
+========================================= */
+
+.cover-back{
+
+    right:0;
+
+    transform-origin:
+        right center;
+
+    border-radius:
+        0 15px 15px 0;
+
+}
+
+
+/* =========================================
+   COVER MEMBUKA
+========================================= */
+
+#book.opening
+.cover-front{
+
+    animation:
+        openLeft
+        2s
+        cubic-bezier(
+            .22,
+            .61,
+            .36,
+            1
+        )
+        forwards;
+
+}
+
+
+#book.opening
+.cover-back{
+
+    animation:
+        openRight
+        2s
+        cubic-bezier(
+            .22,
+            .61,
+            .36,
+            1
+        )
+        forwards;
+
+}
+
+
+/* KIRI → KIRI */
+
+@keyframes openLeft{
+
+    from{
+
+        transform:
+            rotateY(0deg);
+
+    }
+
+    to{
+
+        transform:
+            rotateY(-180deg);
+
+    }
+
+}
+
+
+/* KANAN → KANAN */
+
+@keyframes openRight{
+
+    from{
+
+        transform:
+            rotateY(0deg);
+
+    }
+
+    to{
+
+        transform:
+            rotateY(180deg);
+
+    }
+
+}
+
+
+/* =========================================
+   TEKS
+========================================= */
+
+.page-content{
+
+    opacity:0;
+
+    transform:
+        translateY(25px);
+
+}
+
+
+#book.typing
+.page-content{
+
+    animation:
+        textAppear
+        1s
+        ease
+        forwards;
+
+}
+
+
+@keyframes textAppear{
+
+    from{
+
+        opacity:0;
+
+        transform:
+            translateY(25px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* =========================================
+   COVER MENUTUP
+========================================= */
+
+#book.closing
+.cover-front{
+
+    animation:
+        closeLeft
+        2s
+        cubic-bezier(
+            .55,
+            .06,
+            .68,
+            .19
+        )
+        forwards;
+
+}
+
+
+#book.closing
+.cover-back{
+
+    animation:
+        closeRight
+        2s
+        cubic-bezier(
+            .55,
+            .06,
+            .68,
+            .19
+        )
+        forwards;
+
+}
+
+
+@keyframes closeLeft{
+
+    from{
+
+        transform:
+            rotateY(-180deg);
+
+    }
+
+    to{
+
+        transform:
+            rotateY(0deg);
+
+    }
+
+}
+
+
+@keyframes closeRight{
+
+    from{
+
+        transform:
+            rotateY(180deg);
+
+    }
+
+    to{
+
+        transform:
+            rotateY(0deg);
+
+    }
+
+}
+
+
+/* =========================================
+   BUKU MENGHILANG
+========================================= */
+
+#book.book-disappear{
+
+    animation:
+        bookDisappear
+        1s
+        ease
+        forwards;
+
+}
+
+
+@keyframes bookDisappear{
+
+    from{
+
+        opacity:1;
+
+        transform:
+            scale(1);
+
+    }
+
+    to{
+
+        opacity:0;
+
+        transform:
+            scale(.8)
+            translateY(40px);
+
+    }
+
+}
+
+
+/* =========================================
+   ISI
+========================================= */
+
+#letterTitle{
+
+    font-family:
+        'Cormorant Garamond',
+        serif;
+
+    font-size:48px;
+
+    color:#3b3028;
+
+    margin-bottom:15px;
+
+}
+
+
+#typing{
+
+    line-height:2;
+
+    color:#554a40;
+
+    font-size:15px;
+
+    white-space:pre-line;
+
+    height:280px;
+
+    max-height:280px;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+
+    padding-right:15px;
+
+    scroll-behavior:smooth;
+
+    cursor:text;
+
+}
+
+
+/* Scrollbar teks */
+
+#typing::-webkit-scrollbar{
+
+    width:5px;
+
+}
+
+#typing::-webkit-scrollbar-track{
+
+    background:rgba(100,80,60,.08);
+
+    border-radius:10px;
+
+}
+
+#typing::-webkit-scrollbar-thumb{
+
+    background:rgba(100,80,60,.35);
+
+    border-radius:10px;
+
+}
+
+
+.memory-quote{
+
+    font-family:
+        'Cormorant Garamond',
+        serif;
+
+    font-size:30px;
+
+    line-height:1.5;
+
+    font-style:italic;
+
+    color:#645548;
+
+}
+
+
+.page-number{
+
+    font-size:11px;
+
+    letter-spacing:4px;
+
+    opacity:.5;
+
+    margin-bottom:30px;
+
+}
+
+
+.page-line{
+
+    width:70px;
+
+    height:1px;
+
+    background:#9d8975;
+
+    margin-bottom:25px;
+
+}
+#bookHint{
+
+    position:fixed;
+
+    bottom:40px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    padding:12px 25px;
+
+    border-radius:30px;
+
+    background:rgba(0,0,0,.5);
+
+    backdrop-filter:blur(10px);
+
+    color:white;
+
+    font-size:12px;
+
+    letter-spacing:2px;
+
+    opacity:.8;
+
+    pointer-events:none;
+
+}
+.cover-front{
+    left:0;
+
+    transform-origin:left center;
+
+    border-radius:15px 0 0 15px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+#themePanel{
+
+position:fixed;
+
+top:20px;
+
+right:20px;
+
+z-index:300;
+
+}
+
+#musicPanel{
+
+position:fixed;
+
+top:70px;
+
+right:20px;
+
+z-index:300;
+
+}
+
+select{
+
+padding:10px 15px;
+
+border-radius:30px;
+
+border:none;
+
+background:white;
+
+}
+
+#gallery{
+    position:fixed;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    display:none;
+    gap:20px;
+    z-index:9000;
+}
+
+.photo{
+    width:150px;
+    height:190px;
+    opacity:0;
+    transform:translateY(80px) scale(.8) rotate(-8deg);
+}
+
+.photo.show{
+    animation:photoIn .8s forwards;
+}
+
+@keyframes photoIn{
+
+0%{
+opacity:0;
+transform:translateY(80px) scale(.8) rotate(-10deg);
+}
+
+100%{
+opacity:1;
+transform:translateY(0) scale(1) rotate(0);
+}
+
+}
+
+.photo.hide{
+    animation:photoOut .8s forwards;
+}
+
+@keyframes photoOut{
+
+0%{
+opacity:1;
+}
+
+100%{
+opacity:0;
+transform:scale(.8);
+}
+
+}
+
+.photo:nth-child(even){
+
+transform:rotate(4deg);
+
+}
+
+.photo:hover{
+
+transform:scale(1.1) rotate(0);
+
+}
+#bg.galaxy{
+
+background:
+radial-gradient(circle at top,#1f2959 0%,#090b16 45%,#030308 100%);
+
+}
+
+#bg.ocean{
+
+background:
+linear-gradient(180deg,#74cfff,#2f87c8,#05395f);
+
+}
+
+#bg.sunset{
+
+background:
+linear-gradient(180deg,#ffb46b,#ff6d63,#5c2f8d);
+
+}
+
+#bg.sakura{
+
+background:
+linear-gradient(180deg,#fff5fa,#ffd5e8,#ffc3dd);
+
+}
+#weather{
+
+position:fixed;
+
+left:20px;
+
+top:20px;
+
+display:flex;
+
+gap:10px;
+
+z-index:999;
+
+}
+
+#weather button{
+
+padding:10px 18px;
+
+border:none;
+
+border-radius:40px;
+
+cursor:pointer;
+
+background:white;
+
+}
+#viewer{
+
+position:fixed;
+
+inset:0;
+
+background:rgba(0,0,0,.9);
+
+display:none;
+
+justify-content:center;
+
+align-items:center;
+
+z-index:9999;
+
+}
+
+#viewer img{
+
+max-width:90%;
+
+max-height:90%;
+
+border-radius:15px;
+
+cursor:pointer;
+
+}
+#aurora{
+
+position:fixed;
+inset:-30%;
+
+background:
+radial-gradient(circle at 20% 40%,rgba(88,255,221,.18),transparent 35%),
+radial-gradient(circle at 80% 30%,rgba(173,92,255,.18),transparent 35%),
+radial-gradient(circle at 50% 80%,rgba(110,255,140,.15),transparent 35%);
+
+filter:blur(80px);
+
+animation:auroraMove 20s ease-in-out infinite alternate;
+
+pointer-events:none;
+
+}
+
+@keyframes auroraMove{
+
+0%{
+
+transform:
+translateX(-6%)
+rotate(-3deg);
+
+}
+
+100%{
+
+transform:
+translateX(6%)
+rotate(3deg);
+
+}
+
+}
+#constellation{
+
+position:fixed;
+inset:0;
+pointer-events:none;
+
+}
+
+.star-node{
+
+position:absolute;
+
+width:8px;
+height:8px;
+
+background:white;
+
+border-radius:50%;
+
+box-shadow:
+0 0 15px white;
+
+pointer-events:auto;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.star-node:hover{
+
+transform:scale(1.8);
+
+}
+#lake::after{
+
+content:"";
+
+position:absolute;
+
+left:0;
+right:0;
+top:100%;
+
+height:80px;
+
+background:linear-gradient(
+
+rgba(170,220,255,.25),
+
+transparent
+
+);
+
+transform:scaleY(-1);
+
+filter:blur(10px);
+
+opacity:.45;
+
+}
+
+#bgVideo{
+
+position:fixed;
+
+inset:0;
+
+width:100%;
+height:100%;
+
+object-fit:cover;
+
+opacity:.15;
+
+z-index:-2;
+pointer-events:none;
+
+}
+:root{
+
+--wind:0deg;
+
+}
+
+#tree{
+
+transform:
+translateX(-50%)
+rotate(var(--wind));
+
+transition:2.5s;
+
+}
+
+body.galaxy{
+
+background:#04050a;
+
+}
+
+body.ocean{
+
+background:linear-gradient(
+180deg,
+#0d4f8b,
+#02253f
+);
+
+}
+
+body.sunset{
+
+background:linear-gradient(
+180deg,
+#ff8a5c,
+#ff4d6d,
+#432371
+);
+
+}
+
+body.sakura{
+
+background:linear-gradient(
+180deg,
+#ffd6e8,
+#ffc4dd,
+#ffeef6
+);
+
+}
+#flash{
+    position:fixed;
+    inset:0;
+    background:white;
+    opacity:0;
+    pointer-events:none;
+    z-index:9998;
+    transition:1s;
+}
+
+#bookHint{
+    position:fixed;
+    bottom:40px;
+    left:50%;
+    transform:translateX(-50%);
+    padding:12px 25px;
+    border-radius:30px;
+    background:rgba(0,0,0,.5);
+    backdrop-filter:blur(10px);
+    color:white;
+    font-size:12px;
+    letter-spacing:2px;
+    opacity:.8;
+    pointer-events:auto;
+    cursor:pointer;
+    z-index:10000;
+    user-select:none;
+    animation:hintPulse 2s ease-in-out infinite;
+}
+
+@keyframes hintPulse{
+
+    0%,100%{
+        opacity:.5;
+    }
+
+    50%{
+        opacity:1;
+    }
+
+}
+/* ==============================
+   TRANSISI KEMBALI KE AWAL
+============================== */
+
+#intro{
+    transition:
+        opacity 1.5s ease,
+        transform 1.5s ease;
+}
+
+/* Saat kembali ke awal, intro muncul perlahan */
+#intro.returning{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+}
+
+/* World mundur perlahan */
+#world.returning{
+    transition:
+        transform 2.5s cubic-bezier(.22,.61,.36,1);
+}
+</style>
+
+</head>
+
+<body>
+
+<div id="bg">
+    <div id="constellation"></div>
+    <div id="aurora"></div>
+    <div id="world">
+
+    <div id="island">
+
+        <div id="tree"></div>
+
+    
+
+    </div>
+<div id="lake"></div>
+
+<div id="butterflies">
+    <div class="butterfly"></div>
+    <div class="butterfly"></div>
+    <div class="butterfly"></div>
+    <div class="butterfly"></div>
+</div>
+</div>
+
+<div id="moon"></div>
+
+<div class="fog"></div>
+
+<div class="fog"></div>
+
+<canvas id="stars"></canvas>
+
+</div>
+
+<div id="loading">
+
+LOADING DREAM...
+
+</div>
+
+<div id="intro">
+
+<div id="title">
+
+AETHERA
+
+</div>
+
+<div id="subtitle">
+
+Every memory deserves its own universe.<br>
+
+Some places only exist because someone remembers them.
+
+</div>
+
+<button class="enter">
+
+ENTER
+
+</button>
+</div>
+
+<div id="library">
+
+    <div id="book">
+
+        <!-- COVER DEPAN -->
+        <div class="book-cover cover-front">
+
+            <div class="cover-decoration">
+                AETHERA
+            </div>
+
+            <div class="cover-title">
+                Memories
+            </div>
+
+            <div class="cover-subtitle">
+                A story that still remembers
+            </div>
+
+        </div>
+
+
+        <!-- ISI BUKU -->
+        <div class="book-pages">
+
+            <!-- HALAMAN KIRI -->
+            <div class="book-page page-left">
+
+                <div class="page-content">
+
+                    <span class="page-number">∞</span>
+
+                    <div class="page-line"></div>
+
+                    <p class="memory-quote">
+                        Some memories<br>
+                        never truly disappear.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- HALAMAN KANAN -->
+            <div class="book-page page-right">
+
+                <div class="page-content">
+
+                    <h2 id="letterTitle">
+                        Dear You
+                    </h2>
+
+                    <div class="page-line"></div>
+
+                    <p id="typing"></p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- COVER BELAKANG -->
+        <div class="book-cover cover-back">
+
+            <div class="cover-decoration">
+                ✦
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="themePanel">
+
+<select id="theme">
+
+<option value="galaxy">Galaxy</option>
+
+<option value="sakura">Sakura</option>
+
+<option value="ocean">Ocean</option>
+
+<option value="sunset">Sunset</option>
+
+</select>
+
+</div>
+
+<div id="musicPanel">
+
+<select id="music">
+
+<option value="">Choose Music</option>
+
+<option value="assets/music/apocalypse.mp3">
+
+Apocalypse
+
+</option>
+
+<option value="assets/music/cry.mp3">
+
+Cry
+
+</option>
+
+<option value="assets/music/sweet.mp3">
+
+Sweet
+
+</option>
+
+<option value="assets/music/blue.mp3">
+
+Blue
+
+</option>
+
+</select>
+
+</div>
+
+<audio id="player" loop></audio>
+
+
+
+
+</div>
+<div id="weather">
+
+<button onclick="enableSakura()">🌸 Sakura</button>
+<button onclick="enableSnow()">❄ Snow</button>
+
+<button onclick="clearWeather()">✨ Clear</button>
+
+</div>
+<input
+
+type="file"
+
+id="upload"
+
+accept="image/*"
+
+hidden
+
+>
+
+<button id="uploadBtn">
+
+Upload Photo
+
+</button>
+
+<div id="viewer">
+
+<img id="viewerImg">
+
+</div>
+<div id="gallery">
+    <img class="photo" src="1.jpeg">
+    <img class="photo" src="2.jpeg">
+    <img class="photo" src="3.jpeg">
+    <img class="photo" src="4.jpeg">
+</div>
+<div id="flash"></div>
+<script>
+
+const canvas=document.getElementById("stars");
+
+const ctx=canvas.getContext("2d");
+
+function resize(){
+
+canvas.width=innerWidth;
+
+canvas.height=innerHeight;
+
+}
+
+resize();
+
+window.onresize=resize;
+
+const stars=[];
+
+for(let i=0;i<250;i++){
+
+stars.push({
+
+x:Math.random()*canvas.width,
+
+y:Math.random()*canvas.height,
+
+r:Math.random()*2,
+
+a:Math.random(),
+
+s:Math.random()*0.02
+
+});
+
+}
+const particles = [];
+
+for(let i=0;i<80;i++){
+
+    particles.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*2+1,
+        dx:(Math.random()-0.5)*0.4,
+        dy:(Math.random()-0.5)*0.4
+    });
+
+}
+
+function drawParticles(){
+
+    ctx.fillStyle="rgba(255,255,255,.8)";
+
+    particles.forEach(p=>{
+
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fill();
+
+        p.x+=p.dx;
+        p.y+=p.dy;
+
+        if(p.x<0)p.x=canvas.width;
+        if(p.x>canvas.width)p.x=0;
+
+        if(p.y<0)p.y=canvas.height;
+        if(p.y>canvas.height)p.y=0;
+
+    });
+
+}
+function draw(){
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+if(currentTheme=="galaxy"){
+
+    stars.forEach(star=>{
+
+        ctx.beginPath();
+        ctx.arc(star.x,star.y,star.r,0,Math.PI*2);
+        ctx.fillStyle=`rgba(255,255,255,${star.a})`;
+        ctx.fill();
+
+        star.a+=star.s;
+
+        if(star.a>=1||star.a<=0){
+
+            star.s*=-1;
+
+        }
+
+    });
+
+}
+
+
+drawParticles();
+
+if(mode==="snow"){
+
+    drawSnow();
+
+}
+if(mode==="rain"){
+
+    drawRain();
+
+}
+if(mode==="sakura"){
+
+    drawSakura();
+
+}
+    requestAnimationFrame(draw);
+}
+
+function drawSakura(){
+
+    sakura.forEach(f=>{
+
+        ctx.save();
+
+        ctx.translate(f.x,f.y);
+
+        ctx.rotate(f.angle);
+
+        ctx.fillStyle="#ffc6dd";
+
+        ctx.beginPath();
+
+        ctx.ellipse(0,0,6,4,0,0,Math.PI*2);
+
+        ctx.fill();
+
+        ctx.restore();
+
+        f.y+=1.2;
+
+        f.x+=Math.sin(f.y*.02);
+
+        f.angle+=0.02;
+
+        if(f.y>canvas.height){
+
+            f.y=-20;
+
+            f.x=Math.random()*canvas.width;
+
+        }
+
+    });
+
+}
+
+// ==========================
+// SAKURA
+// ==========================
+
+const petals=[];
+
+for(let i=0;i<35;i++){
+
+petals.push({
+
+x:Math.random()*innerWidth,
+
+y:Math.random()*innerHeight,
+
+size:6+Math.random()*10,
+
+speed:1+Math.random(),
+
+swing:Math.random()*2
+
+});
+
+}
+
+function drawPetals(){
+
+petals.forEach(p=>{
+
+ctx.beginPath();
+
+ctx.fillStyle="#ffd6ec";
+
+ctx.ellipse(
+
+p.x,
+
+p.y,
+
+p.size,
+
+p.size*.6,
+
+Math.PI/4,
+
+0,
+
+Math.PI*2
+
+);
+
+ctx.fill();
+
+p.y+=p.speed;
+
+p.x+=Math.sin(p.y*.02)*p.swing;
+
+if(p.y>innerHeight){
+
+p.y=-20;
+
+p.x=Math.random()*innerWidth;
+
+}
+
+});
+
+}
+const intro = document.getElementById("intro");
+const world = document.getElementById("world");
+const library = document.getElementById("library");
+const flash = document.getElementById("flash");
+const gallery = document.getElementById("gallery");
+const enterBtn = document.querySelector(".enter");
+console.log(enterBtn);
+
+let entered = false;
+let openedPhotos = 0;
+
+let text = `Some memories never disappear.
+They simply wait...
+Until someone remembers them again.
+Welcome to Aethera.
+This world was created for stories,
+for moments,
+for photographs,
+for music,
+and for hearts that still remember.`;
+
+let typingTimer = null;
+
+function typeWriter(){
+
+    const book = document.getElementById("book");
+    const area = document.getElementById("typing");
+
+    // Gunakan isi surat yang sedang tersimpan.
+    if(window.aetheraSharedState && window.aetheraSharedState.message){
+        text = window.aetheraSharedState.message;
+    }
+
+    // ==============================
+    // RESET
+    // ==============================
+
+    if(typingTimer){
+        clearInterval(typingTimer);
+        typingTimer = null;
+    }
+
+    book.classList.remove(
+        "book-visible",
+        "opening",
+        "pages-visible",
+        "typing",
+        "closing",
+        "book-disappear"
+    );
+
+    area.textContent = "";
+
+    // Reset scroll ke atas
+    area.scrollTop = 0;
+
+    // Paksa browser membaca ulang animasi
+    void book.offsetWidth;
+
+
+    // ==============================
+    // 1. BUKU MUNCUL
+    // ==============================
+
+    book.classList.add("book-visible");
+
+
+    // ==============================
+    // 2. COVER MEMBUKA
+    // ==============================
+
+    setTimeout(() => {
+
+        book.classList.add("opening");
+
+    }, 1000);
+
+
+    // ==============================
+    // 3. COVER SELESAI MEMBUKA
+    // 4. HALAMAN MUNCUL
+    // 5. TYPING DIMULAI
+    // ==============================
+
+    setTimeout(() => {
+
+        book.classList.add("pages-visible");
+
+        book.classList.add("typing");
+
+
+        let i = 0;
+
+
+        typingTimer = setInterval(() => {
+
+
+            // ==============================
+            // TYPING
+            // ==============================
+
+            if(i < text.length){
+
+                area.textContent += text.charAt(i);
+
+                i++;
+
+
+                // ==============================
+                // AUTO SCROLL KE BAWAH
+                // ==============================
+
+                area.scrollTo({
+
+                    top: area.scrollHeight,
+
+                    behavior: "smooth"
+
+                });
+
+
+            }else{
+
+
+                // ==============================
+                // TYPING SELESAI
+                // ==============================
+
+                clearInterval(typingTimer);
+
+                typingTimer = null;
+
+
+                console.log(
+                    "Typing selesai. Menunggu user klik."
+                );
+
+
+                // ==============================
+                // USER HARUS KLIK 1X
+                // ==============================
+
+                book.classList.add(
+                    "waiting-for-click"
+                );
+
+
+                // Tampilkan petunjuk
+                showBookHint();
+
+
+                // ==============================
+                // TUNGGU USER KLIK
+                // ==============================
+
+                // Pasang handler hanya setelah typing selesai.
+                // Hint di bawah juga punya handler klik sendiri.
+                book.addEventListener(
+                    "click",
+                    handleBookClick,
+                    { once:true }
+                );
+
+
+            }
+
+        },35);
+
+
+    },3000);
+
+}
+
+function showBookHint(){
+
+    // Jangan membuat hint ganda.
+    const oldHint = document.getElementById("bookHint");
+    if(oldHint) oldHint.remove();
+
+    const hint = document.createElement("div");
+
+    hint.id = "bookHint";
+    hint.textContent = "Klik sekali untuk menutup buku";
+
+    // Hint bisa diklik langsung.
+    hint.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        const currentHint = document.getElementById("bookHint");
+        if(currentHint) currentHint.remove();
+
+        closeBook();
+    });
+
+    document.getElementById("library").appendChild(hint);
+}
+
+
+function handleBookClick(e){
+
+    // Kalau klik di area teks,
+    // jangan tutup buku
+    if(e.target.closest("#typing")){
+
+        return;
+
+    }
+
+    // Hapus petunjuk
+    const hint =
+        document.getElementById("bookHint");
+
+    if(hint){
+        hint.remove();
+    }
+
+    // Tutup buku
+    closeBook();
+
+}
+function closeBook(){
+
+    const book = document.getElementById("book");
+    const library = document.getElementById("library");
+
+    // Hapus tombol/petunjuk klik jika masih ada.
+    const hint = document.getElementById("bookHint");
+    if(hint) hint.remove();
+
+    // ==============================
+    // 1. TUTUP BUKU
+    // ==============================
+
+    book.classList.remove("opening");
+
+    void book.offsetWidth;
+
+    book.classList.add("closing");
+
+
+    // ==============================
+    // 2. TUNGGU COVER SELESAI MENUTUP
+    // ==============================
+
+    setTimeout(() => {
+
+        // Buku mengecil dan menghilang
+        book.classList.add("book-disappear");
+
+
+        // ==============================
+        // 3. TUNGGU BUKU HILANG
+        // ==============================
+
+        setTimeout(() => {
+
+            // Sembunyikan library
+            library.style.display = "none";
+
+
+            // Reset posisi buku
+            book.className = "";
+
+            document.getElementById("typing").textContent = "";
+
+
+            // ==============================
+            // 4. KEMBALI KE DUNIA AETHERA
+            // ==============================
+
+            resetAethera();
+
+
+        },1000);
+
+    },2000);
+
+}
+function wait(ms){
+
+    return new Promise(resolve=>setTimeout(resolve,ms));
+
+}
+function resetAethera(){
+
+    // ==============================
+    // RESET STATUS
+    // ==============================
+
+    entered = false;
+    openedPhotos = 0;
+
+
+    // ==============================
+    // RESET WORLD
+    // ==============================
+
+    world.style.animation = "none";
+
+    world.style.transition =
+        "transform 2.5s cubic-bezier(.22,.61,.36,1)";
+
+    // Mulai dari kondisi zoom besar
+    world.style.transform =
+        "translateX(-50%) scale(18)";
+
+
+    // ==============================
+    // RESET GALERI
+    // ==============================
+
+    gallery.style.display = "none";
+
+
+    const photos =
+        document.querySelectorAll(".photo");
+
+
+    photos.forEach(photo => {
+
+        photo.classList.remove(
+            "show",
+            "hide"
+        );
+
+        delete photo.dataset.opened;
+
+    });
+
+
+    // ==============================
+    // INTRO MASIH TERSEMBUNYI
+    // ==============================
+
+    intro.style.opacity = "0";
+
+    intro.style.pointerEvents = "none";
+
+
+    // ==============================
+    // FORCE REFLOW
+    // ==============================
+
+    void world.offsetWidth;
+
+
+    // ==============================
+    // KAMERA MUNDUR
+    // ==============================
+
+    requestAnimationFrame(() => {
+
+        world.style.transform =
+            "translateX(-50%) scale(1)";
+
+    });
+
+
+    // ==============================
+    // INTRO MUNCUL SETELAH KAMERA
+    // MULAI MUNDUR
+    // ==============================
+
+    setTimeout(() => {
+
+        intro.style.opacity = "1";
+        intro.style.pointerEvents = "auto";
+
+    },1500);
+
+
+    // ==============================
+    // WORLD KEMBALI MELAYANG
+    // ==============================
+
+    setTimeout(() => {
+
+        world.style.animation =
+            "floatIsland 6s ease-in-out infinite";
+
+    },2500);
+
+
+    // ==============================
+    // RESET FLASH
+    // ==============================
+
+    flash.style.opacity = "0";
+
+}
+
+async function enterWorld(){
+
+    if(entered) return;
+    entered = true;
+
+    // Intro hilang
+    intro.style.opacity = "0";
+    intro.style.pointerEvents = "none";
+
+    // Pulau berhenti melayang
+    world.style.animation = "none";
+
+    
+
+    await wait(300);
+
+    // Kamera masuk ke gate
+    world.style.transition = "2.5s ease-in";
+    world.style.transform = "translateX(-50%) scale(18)";
+
+    await wait(2000);
+
+    // Flash
+    flash.style.opacity = "1";
+
+    await wait(700);
+
+    flash.style.opacity = "0";
+
+    // Galeri muncul
+    gallery.style.display = "flex";
+
+    const photos = document.querySelectorAll(".photo");
+
+    photos.forEach((photo,index)=>{
+
+        setTimeout(()=>{
+            photo.classList.add("show");
+        },index*300);
+
+    });
+
+    // Tunggu user klik foto
+ photos.forEach(photo=>{
+
+    photo.onclick=()=>{
+
+        if(photo.dataset.opened) return;
+
+        photo.dataset.opened = "true";
+
+        viewer.style.display = "flex";
+        viewerImg.src = photo.src;
+
+        openedPhotos++;
+
+    };
+
+});
+    }
+
+enterBtn.addEventListener("click", enterWorld);
+const player=document.getElementById("player");
+
+
+
+let weather=[];
+
+let mode="clear";
+let currentTheme="galaxy";
+draw();
+
+const rainDrops=[]
+for(let i=0;i<150;i++){
+
+    rainDrops.push({
+
+        x:Math.random()*canvas.width,
+
+        y:Math.random()*canvas.height
+
+    });
+
+}
+function drawRain(){
+
+    ctx.strokeStyle = "rgba(180,220,255,.8)";
+
+    rainDrops.forEach(r=>{
+
+        ctx.beginPath();
+
+        ctx.moveTo(r.x,r.y);
+
+        ctx.lineTo(r.x-2,r.y+12);
+
+        ctx.stroke();
+
+        r.y+=12;
+
+        if(r.y>canvas.height){
+            r.y=0;
+            r.x=Math.random()*canvas.width;
+        }
+
+    });
+
+}
+
+const sakura=[]
+for(let i=0;i<60;i++){
+
+    sakura.push({
+
+        x:Math.random()*canvas.width,
+
+        y:Math.random()*canvas.height,
+
+        angle:0
+
+    });
+
+}
+const snow = [];
+
+for(let i=0;i<150;i++){
+
+    snow.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*3+1
+    });
+
+}
+
+function drawSnow(){
+
+    ctx.fillStyle="white";
+
+    snow.forEach(s=>{
+
+        ctx.beginPath();
+
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+
+        ctx.fill();
+
+        s.y+=1;
+
+        s.x+=Math.sin(s.y*.01);
+
+        if(s.y>canvas.height){
+
+            s.y=0;
+
+            s.x=Math.random()*canvas.width;
+
+        }
+
+    });
+
+}
+
+function clearWeather(){
+
+    mode = "clear";
+
+}
+
+function enableSnow(){
+
+    mode = "snow";
+
+}
+function enableSakura(){
+
+    mode="sakura";
+
+}
+
+
+const uploadBtn = document.getElementById("uploadBtn");
+const upload = document.getElementById("upload");
+const viewer = document.getElementById("viewer");
+const viewerImg = document.getElementById("viewerImg");
+const music = document.getElementById("music");
+const theme = document.getElementById("theme");
+uploadBtn.onclick=()=>{
+
+upload.click();
+
+}
+
+upload.onchange=e=>{
+
+const file=e.target.files[0];
+
+if(!file)return;
+
+const url=URL.createObjectURL(file);
+
+const img=document.createElement("img");
+img.src=url;
+img.className="photo";
+
+img.onclick = () => {
+    viewer.style.display = "flex";
+    viewerImg.src = img.src;
+    photoOpened = true;
+};
+
+gallery.appendChild(img);
+
+}
+music.onchange = async () => {
+
+    player.src = music.value;
+
+    try{
+        await player.play();
+    }catch(err){
+        console.log("Music gagal:", err);
+    }
+
+    localStorage.setItem("music", music.value);
+
+}
+
+
+window.onload = async () => {
+
+    const m = localStorage.getItem("music");
+
+    if(m){
+        player.src = m;
+
+        try{
+            await player.play();
+        }catch(e){}
+    }
+
+    const t = localStorage.getItem("theme");
+
+    if(t){
+        currentTheme = t;
+        document.getElementById("bg").className = t;
+        theme.value = t;
+    }
+
+}
+
+    const t=localStorage.getItem("theme");
+
+    if(t){currentTheme=t;
+
+document.body.className=t;
+
+theme.value=t;
+
+    }
+
+
+viewer.onclick = () => {
+
+    viewer.style.display =
+        "none";
+
+
+    const totalPhotos =
+        document.querySelectorAll(
+            ".photo"
+        ).length;
+
+
+    // ==============================
+    // SEMUA FOTO SUDAH DIBUKA
+    // ==============================
+
+    if(
+        openedPhotos >= totalPhotos
+    ){
+
+        // Foto menghilang
+        document
+            .querySelectorAll(".photo")
+            .forEach(photo => {
+
+                photo.classList.add(
+                    "hide"
+                );
+
+            });
+
+
+        // Tunggu foto menghilang
+        setTimeout(() => {
+
+            gallery.style.display =
+                "none";
+
+
+            // Tampilkan buku
+            library.style.display =
+                "flex";
+
+
+            // Mulai animasi buku
+            typeWriter();
+
+
+        },800);
+
+    }
+
+};
+
+const constellation=document.getElementById("constellation");
+
+for(let i=0;i<12;i++){
+
+const star=document.createElement("div");
+
+star.className="star-node";
+
+star.style.left=Math.random()*90+"%";
+
+star.style.top=Math.random()*70+"%";
+
+star.onclick=()=>{
+
+alert("A hidden memory has awakened.");
+
+}
+
+constellation.appendChild(star);
+
+}
+let camX=0;
+let camY=0;
+
+document.addEventListener("mousemove",(e)=>{
+
+    if(entered) return;
+
+    camX=(e.clientX/window.innerWidth-.5)*20;
+
+    camY=(e.clientY/window.innerHeight-.5)*20;
+
+  world.style.transform =
+`translateX(calc(-50% + ${camX}px)) translateY(${camY}px)`;
+
+});
+
+setInterval(()=>{
+
+document.documentElement.style.setProperty(
+
+"--wind",
+
+(Math.random()*10-5)+"deg"
+
+);
+
+},2500);
+
+
+theme.onchange=()=>{
+
+    currentTheme=theme.value;
+
+   const bg=document.getElementById("bg");
+
+bg.className=currentTheme;
+
+    switch(currentTheme){
+
+        case "galaxy":
+            mode="clear";
+            break;
+
+        case "ocean":
+            mode="rain";
+            break;
+
+        case "sunset":
+            mode="clear";
+            break;
+
+        case "sakura":
+            mode="sakura";
+            break;
+
+    }
+
+    localStorage.setItem("theme",currentTheme);
+
+}
+</script>
+
+
+<!-- ==============================
+     AETHERA SHARED EDITOR
+     ============================== -->
+<div id="editorLauncher" title="Edit Aethera">✦ Edit Aethera</div>
+
+<div id="editorModal" aria-hidden="true">
+  <div id="editorCard">
+    <button id="editorClose" type="button" aria-label="Close">×</button>
+    <div class="editorHeader">
+      <div>
+        <div class="editorEyebrow">AETHERA</div>
+        <h2>Edit your world</h2>
+        <p>Perubahan tersimpan untuk semua orang yang membuka link ini.</p>
+      </div>
+      <div id="saveStatus">Belum ada perubahan</div>
+    </div>
+
+    <div class="editorGrid">
+      <section class="editorSection">
+        <h3>✦ Isi Surat</h3>
+
+        <label>Judul sampul
+          <input id="editCoverTitle" type="text" placeholder="Memories">
+        </label>
+
+        <label>Subjudul sampul
+          <input id="editCoverSubtitle" type="text" placeholder="A story that still remembers">
+        </label>
+
+        <label>Judul surat
+          <input id="editLetterTitle" type="text" placeholder="Dear You">
+        </label>
+
+        <label>Quote halaman kiri
+          <textarea id="editQuote" rows="3" placeholder="Some memories&#10;never truly disappear."></textarea>
+        </label>
+
+        <label>Isi surat
+          <textarea id="editMessage" rows="10" placeholder="Tulis isi surat di sini..."></textarea>
+        </label>
+      </section>
+
+      <section class="editorSection">
+        <h3>▧ Foto</h3>
+        <p class="editorHelp">Pilih sampai 4 foto. Foto baru akan tersimpan di cloud dan terlihat oleh semua orang.</p>
+
+        <div class="photoEditors">
+          <div class="photoEditor">
+            <div class="photoPreview" id="preview1"></div>
+            <label>Foto 1<input id="photo1" type="file" accept="image/*"></label>
+          </div>
+          <div class="photoEditor">
+            <div class="photoPreview" id="preview2"></div>
+            <label>Foto 2<input id="photo2" type="file" accept="image/*"></label>
+          </div>
+          <div class="photoEditor">
+            <div class="photoPreview" id="preview3"></div>
+            <label>Foto 3<input id="photo3" type="file" accept="image/*"></label>
+          </div>
+          <div class="photoEditor">
+            <div class="photoPreview" id="preview4"></div>
+            <label>Foto 4<input id="photo4" type="file" accept="image/*"></label>
+          </div>
+        </div>
+
+        <button id="clearPhotos" class="dangerBtn" type="button">Hapus semua foto</button>
+      </section>
+    </div>
+
+    <div class="editorFooter">
+      <span>⚠ Semua orang yang punya link dapat mengedit konten ini.</span>
+      <div>
+        <button id="resetEditor" class="secondaryBtn" type="button">Reset form</button>
+        <button id="saveEditor" class="primaryBtn" type="button">Simpan ke Aethera</button>
+      </div>
+    </div>
+
+    <div id="firebaseNotice" class="firebaseNotice">
+      Shared mode belum aktif. Masukkan Firebase config pada bagian <b>FIREBASE CONFIG</b> di kode ini.
+    </div>
+  </div>
+</div>
+
+<style>
+#editorLauncher{
+  position:fixed;
+  left:20px;
+  bottom:20px;
+  z-index:12000;
+  padding:12px 18px;
+  border-radius:30px;
+  background:rgba(255,255,255,.92);
+  color:#2b211b;
+  font:500 12px 'Poppins',sans-serif;
+  letter-spacing:.5px;
+  cursor:pointer;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+  transition:.25s;
+}
+#editorLauncher:hover{transform:translateY(-3px);box-shadow:0 15px 35px rgba(0,0,0,.3)}
+
+#editorModal{
+  position:fixed;
+  inset:0;
+  z-index:13000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:25px;
+  background:rgba(5,7,15,.72);
+  backdrop-filter:blur(14px);
+}
+#editorModal.open{display:flex}
+
+#editorCard{
+  width:min(1000px,96vw);
+  max-height:92vh;
+  overflow:auto;
+  position:relative;
+  padding:30px;
+  border-radius:24px;
+  background:rgba(250,247,242,.98);
+  color:#342a24;
+  box-shadow:0 35px 100px rgba(0,0,0,.45);
+}
+#editorClose{
+  position:absolute;
+  top:14px;
+  right:18px;
+  border:0;
+  background:transparent;
+  font-size:30px;
+  color:#55483e;
+  cursor:pointer;
+}
+.editorHeader{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+  padding-right:35px;
+  margin-bottom:25px;
+}
+.editorEyebrow{
+  letter-spacing:5px;
+  font-size:10px;
+  opacity:.55;
+}
+.editorHeader h2{
+  margin:5px 0;
+  font:600 34px 'Cormorant Garamond',serif;
+}
+.editorHeader p{
+  font-size:12px;
+  opacity:.65;
+}
+#saveStatus{
+  padding:8px 12px;
+  border-radius:20px;
+  background:#eee6dc;
+  font-size:11px;
+  white-space:nowrap;
+}
+.editorGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+.editorSection{
+  padding:20px;
+  border-radius:18px;
+  background:#f2ece4;
+}
+.editorSection h3{
+  margin-bottom:16px;
+  font:600 23px 'Cormorant Garamond',serif;
+}
+.editorSection label{
+  display:block;
+  margin:0 0 14px;
+  font-size:11px;
+  letter-spacing:.5px;
+}
+.editorSection input[type="text"],
+.editorSection textarea{
+  display:block;
+  width:100%;
+  margin-top:7px;
+  padding:11px 13px;
+  border:1px solid #d9cec1;
+  border-radius:12px;
+  outline:none;
+  background:#fffdfa;
+  color:#342a24;
+  font:400 13px 'Poppins',sans-serif;
+  resize:vertical;
+}
+.editorSection input[type="text"]:focus,
+.editorSection textarea:focus{
+  border-color:#9e8874;
+  box-shadow:0 0 0 3px rgba(158,136,116,.12);
+}
+.editorHelp{
+  margin:-8px 0 16px;
+  font-size:11px;
+  line-height:1.7;
+  opacity:.65;
+}
+.photoEditors{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.photoEditor{
+  padding:10px;
+  border:1px solid #ded3c8;
+  border-radius:14px;
+  background:#fffdfa;
+}
+.photoPreview{
+  width:100%;
+  height:125px;
+  margin-bottom:8px;
+  border-radius:10px;
+  background:#e9e0d7;
+  background-size:cover;
+  background-position:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#9a8d80;
+  font-size:10px;
+}
+.photoPreview:empty::after{content:"No photo"}
+.photoEditor label{
+  margin:0;
+}
+.photoEditor input[type="file"]{
+  width:100%;
+  margin-top:6px;
+  font-size:10px;
+}
+.editorFooter{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  margin-top:20px;
+  font-size:10px;
+  opacity:.7;
+}
+.editorFooter > div{
+  display:flex;
+  gap:8px;
+}
+.primaryBtn,.secondaryBtn,.dangerBtn{
+  border:0;
+  border-radius:25px;
+  padding:11px 17px;
+  cursor:pointer;
+  font:500 11px 'Poppins',sans-serif;
+}
+.primaryBtn{background:#3b3028;color:white}
+.secondaryBtn{background:#e6ddd3;color:#3b3028}
+.dangerBtn{
+  margin-top:10px;
+  background:#ead6d0;
+  color:#6e352b;
+}
+.firebaseNotice{
+  margin-top:15px;
+  padding:10px 12px;
+  border-radius:12px;
+  background:#fff3cd;
+  color:#735b20;
+  font-size:10px;
+  line-height:1.6;
+}
+@media(max-width:800px){
+  #editorCard{padding:22px}
+  .editorGrid{grid-template-columns:1fr}
+  .editorHeader{display:block}
+  #saveStatus{display:inline-block;margin-top:12px}
+}
+@media(max-width:500px){
+  #editorLauncher{left:12px;bottom:12px;font-size:10px;padding:10px 14px}
+  #editorModal{padding:10px}
+  .photoEditors{grid-template-columns:1fr}
+  .editorFooter{display:block}
+  .editorFooter > div{margin-top:12px;flex-wrap:wrap}
+}
+</style>
+
+
+<!-- Firebase CDN. Shared editing uses anonymous auth + Firestore + Storage. -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore, doc, setDoc, onSnapshot, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  getStorage, ref, uploadBytes, getDownloadURL, deleteObject
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+/* =========================================================
+   FIREBASE CONFIG
+   1. Buat project Firebase.
+   2. Aktifkan Anonymous Authentication.
+   3. Aktifkan Firestore Database + Storage.
+   4. Tempel config web project kamu di bawah.
+   ========================================================= */
+const FIREBASE_CONFIG = {
+  apiKey: "PASTE_API_KEY",
+  authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
+  projectId: "PASTE_PROJECT_ID",
+  storageBucket: "PASTE_PROJECT_ID.firebasestorage.app",
+  messagingSenderId: "PASTE_MESSAGING_SENDER_ID",
+  appId: "PASTE_APP_ID"
+};
+
+const sharedEnabled =
+  !Object.values(FIREBASE_CONFIG).some(v => String(v).includes("PASTE_"));
+
+const editorModal = document.getElementById("editorModal");
+const editorLauncher = document.getElementById("editorLauncher");
+const editorClose = document.getElementById("editorClose");
+const saveEditor = document.getElementById("saveEditor");
+const resetEditor = document.getElementById("resetEditor");
+const clearPhotos = document.getElementById("clearPhotos");
+const saveStatus = document.getElementById("saveStatus");
+const firebaseNotice = document.getElementById("firebaseNotice");
+
+const fields = {
+  coverTitle: document.getElementById("editCoverTitle"),
+  coverSubtitle: document.getElementById("editCoverSubtitle"),
+  letterTitle: document.getElementById("editLetterTitle"),
+  quote: document.getElementById("editQuote"),
+  message: document.getElementById("editMessage")
+};
+
+const fileInputs = [1,2,3,4].map(i => document.getElementById("photo"+i));
+const previews = [1,2,3,4].map(i => document.getElementById("preview"+i));
+
+const defaults = {
+  coverTitle: "Memories",
+  coverSubtitle: "A story that still remembers",
+  letterTitle: "Dear You",
+  quote: "Some memories\nnever truly disappear.",
+  message: `Some memories never disappear.
+They simply wait...
+Until someone remembers them again.
+Welcome to Aethera.
+This world was created for stories,
+for moments,
+for photographs,
+for music,
+and for hearts that still remember.`,
+  photos: ["1.jpeg","2.jpeg","3.jpeg","4.jpeg"]
+};
+
+let sharedState = structuredClone(defaults);
+let firebaseDb = null;
+let firebaseStorage = null;
+let firebaseDocRef = null;
+let unsubscribeShared = null;
+
+function setStatus(text){
+  saveStatus.textContent = text;
+}
+
+function openEditor(){
+  editorModal.classList.add("open");
+  editorModal.setAttribute("aria-hidden","false");
+  fillEditor(sharedState);
+}
+function closeEditor(){
+  editorModal.classList.remove("open");
+  editorModal.setAttribute("aria-hidden","true");
+}
+editorLauncher.onclick = openEditor;
+editorClose.onclick = closeEditor;
+editorModal.addEventListener("click", e => {
+  if(e.target === editorModal) closeEditor();
+});
+
+function fillEditor(state){
+  fields.coverTitle.value = state.coverTitle || "";
+  fields.coverSubtitle.value = state.coverSubtitle || "";
+  fields.letterTitle.value = state.letterTitle || "";
+  fields.quote.value = state.quote || "";
+  fields.message.value = state.message || "";
+
+  (state.photos || []).slice(0,4).forEach((url,i) => {
+    previews[i].style.backgroundImage = url ? `url("${url}")` : "";
+  });
+  for(let i=(state.photos || []).length;i<4;i++){
+    previews[i].style.backgroundImage = "";
+  }
+}
+
+function applyState(state){
+  sharedState = {
+    ...defaults,
+    ...state,
+    photos: Array.isArray(state.photos) ? state.photos.slice(0,4) : defaults.photos
+  };
+
+  // Dipakai oleh script Aethera utama (termasuk typewriter).
+  window.aetheraSharedState = sharedState;
+
+  // Sampul
+  const coverTitle = document.querySelector(".cover-title");
+  const coverSubtitle = document.querySelector(".cover-subtitle");
+  if(coverTitle) coverTitle.textContent = sharedState.coverTitle;
+  if(coverSubtitle) coverSubtitle.textContent = sharedState.coverSubtitle;
+
+  // Surat
+  const letterTitle = document.getElementById("letterTitle");
+  if(letterTitle) letterTitle.textContent = sharedState.letterTitle;
+
+  const quote = document.querySelector(".memory-quote");
+  if(quote) {
+    quote.innerHTML = "";
+    sharedState.quote.split("\n").forEach((line,i) => {
+      if(i) quote.appendChild(document.createElement("br"));
+      quote.appendChild(document.createTextNode(line));
+    });
+  }
+
+  // Galeri
+  const photoEls = [...document.querySelectorAll("#gallery .photo")];
+  photoEls.forEach((img,i) => {
+    const url = sharedState.photos[i];
+    if(url){
+      img.src = url;
+      img.style.display = "";
+    }else{
+      img.removeAttribute("src");
+      img.style.display = "none";
+    }
+  });
+
+  // Jika foto yang tersimpan kurang dari 4, tetap sembunyikan slot kosong.
+  document.getElementById("gallery").dataset.photoCount =
+    String(sharedState.photos.filter(Boolean).length);
+
+  fillEditor(sharedState);
+}
+
+function collectTextState(){
+  return {
+    coverTitle: fields.coverTitle.value.trim() || defaults.coverTitle,
+    coverSubtitle: fields.coverSubtitle.value.trim() || defaults.coverSubtitle,
+    letterTitle: fields.letterTitle.value.trim() || defaults.letterTitle,
+    quote: fields.quote.value.trim() || defaults.quote,
+    message: fields.message.value.trim() || defaults.message,
+    photos: [...sharedState.photos]
+  };
+}
+
+async function saveLocalFallback(state){
+  localStorage.setItem("aetheraSharedDraft", JSON.stringify(state));
+  applyState(state);
+  setStatus("Tersimpan di browser ini");
+}
+
+async function saveShared(){
+  const textState = collectTextState();
+
+  if(!sharedEnabled || !firebaseDocRef){
+    await saveLocalFallback(textState);
+    return;
+  }
+
+  saveEditor.disabled = true;
+  setStatus("Menyimpan...");
+
+  try{
+    const selected = fileInputs.map(input => input.files[0] || null);
+    const photos = [...textState.photos];
+
+    for(let i=0;i<4;i++){
+      const file = selected[i];
+      if(!file) continue;
+
+      if(!file.type.startsWith("image/")){
+        throw new Error(`File foto ${i+1} bukan gambar.`);
+      }
+      if(file.size > 8 * 1024 * 1024){
+        throw new Error(`Foto ${i+1} terlalu besar. Maksimal 8 MB.`);
+      }
+
+      const path = `aethera/photos/photo-${i+1}`;
+      const storageRef = ref(firebaseStorage, path);
+      await uploadBytes(storageRef, file, {contentType:file.type});
+      photos[i] = await getDownloadURL(storageRef);
+    }
+
+    const finalState = {...textState, photos};
+
+    await setDoc(firebaseDocRef, {
+      ...finalState,
+      updatedAt: serverTimestamp()
+    }, {merge:true});
+
+    fileInputs.forEach(input => input.value = "");
+    setStatus("✓ Tersimpan untuk semua orang");
+  }catch(err){
+    console.error(err);
+    setStatus("Gagal menyimpan");
+    alert("Gagal menyimpan: " + err.message);
+  }finally{
+    saveEditor.disabled = false;
+  }
+}
+
+saveEditor.onclick = saveShared;
+
+resetEditor.onclick = () => {
+  fillEditor(sharedState);
+  fileInputs.forEach(input => input.value = "");
+  setStatus("Form dikembalikan");
+};
+
+clearPhotos.onclick = async () => {
+  if(!confirm("Hapus semua foto dari Aethera?")) return;
+
+  const newState = {...collectTextState(), photos:[null,null,null,null]};
+
+  if(!sharedEnabled || !firebaseStorage || !firebaseDocRef){
+    await saveLocalFallback(newState);
+    return;
+  }
+
+  try{
+    for(let i=1;i<=4;i++){
+      try{
+        await deleteObject(ref(firebaseStorage, `aethera/photos/photo-${i}`));
+      }catch(e){
+        // File mungkin belum ada.
+      }
+    }
+    await setDoc(firebaseDocRef, {
+      ...newState,
+      updatedAt: serverTimestamp()
+    }, {merge:true});
+    setStatus("✓ Semua foto dihapus");
+  }catch(err){
+    console.error(err);
+    alert("Gagal menghapus foto: " + err.message);
+  }
+};
+
+fileInputs.forEach((input,i) => {
+  input.addEventListener("change", () => {
+    const file = input.files[0];
+    if(!file) return;
+    previews[i].style.backgroundImage = `url("${URL.createObjectURL(file)}")`;
+    setStatus("Foto baru siap disimpan");
+  });
+});
+
+function loadLocal(){
+  try{
+    const saved = JSON.parse(localStorage.getItem("aetheraSharedDraft"));
+    if(saved) applyState(saved);
+    else applyState(defaults);
+  }catch(e){
+    applyState(defaults);
+  }
+}
+
+if(!sharedEnabled){
+  firebaseNotice.style.display = "block";
+  loadLocal();
+}else{
+  firebaseNotice.style.display = "none";
+
+  try{
+    const app = initializeApp(FIREBASE_CONFIG);
+    const auth = getAuth(app);
+    firebaseDb = getFirestore(app);
+    firebaseStorage = getStorage(app);
+    firebaseDocRef = doc(firebaseDb, "aethera", "public");
+
+    signInAnonymously(auth).then(() => {
+      unsubscribeShared = onSnapshot(firebaseDocRef, snap => {
+        if(snap.exists()){
+          applyState(snap.data());
+          setStatus("Live • tersinkron");
+        }else{
+          applyState(defaults);
+          setStatus("Belum ada data bersama");
+        }
+      }, err => {
+        console.error(err);
+        setStatus("Koneksi shared gagal");
+        loadLocal();
+      });
+    }).catch(err => {
+      console.error(err);
+      setStatus("Login anonymous gagal");
+      loadLocal();
+    });
+  }catch(err){
+    console.error(err);
+    setStatus("Firebase belum siap");
+    loadLocal();
+  }
+}
+
+// Keyboard shortcut: Ctrl/Cmd + E membuka editor.
+document.addEventListener("keydown", e => {
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "e"){
+    e.preventDefault();
+    openEditor();
+  }
+});
+</script>
+
+</body>
+</html>
